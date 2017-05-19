@@ -276,6 +276,37 @@ class tokenSortAdvanced(unittest.TestCase):
 		output = ["=", "V10", "-", "+", "/", "4.23", "10", "V8", "/", "2.1", "V1"]
 		self.assertEqual(tokenSort(test), output)
 
+#Negatives
+class tokenSortNegatives(unittest.TestCase):
+	def Test1(self):
+		test = ["V59", "=", "-", "V9"]
+		output = ["=", "V59", "-V9"]
+		self.assertEqual(tokenSort(test), output)		
+	def Test2(self):
+		test = ["V59", "=", "-", "4.23", "*", "10"]
+		output = ["=", "V59", "*", "-4.23", "10"]
+		self.assertEqual(tokenSort(test), output)
+	def Test3(self):
+		test = ["V1", "=", "4.23", "*", "-", "10"]
+		output = ["=", "V1", "*", "4.23", "-10"]
+		self.assertEqual(tokenSort(test), output)
+	def Test4(self):
+		test = ["-", "3", "-", "4.23", "+", "10"]
+		output = ["-", "-3", "+", "4.23", "10"]
+		self.assertEqual(tokenSort(test), output)
+	def Test5(self):
+		test = ["V1", "=", "-", "4.23", "-", "-", "V10", "/", "-", "2.1", "*", "9.4"]
+		output = ["=", "V1", "-", "-4.23", "/", "-V10", "*", "-2.1", "9.4"]
+		self.assertEqual(tokenSort(test), output)
+
+#Parenthesis
+class tokenSortParenthesis(unittest.TestCase):
+	def Test1(self):
+		test = ["V59", "=", "-", "4.23", "*", "10"]
+		output = ["=", "V59", "*", "-4.23", "10"]
+		self.assertEqual(tokenSort(test), output)
+
+
 def tokenSortBasicTestSuite():
 	suite = unittest.TestSuite()
 	suite.addTest(tokenSortBasicTestCases('Test1'))
@@ -298,7 +329,22 @@ def tokenSortBasicAdvancedSuite():
 	suite.addTest(tokenSortAdvanced('Test6'))
 	unittest.TextTestRunner(verbosity=2).run(suite)
 
+def tokenSortNegativesSuite():
+	suite = unittest.TestSuite()
+	suite.addTest(tokenSortNegatives('Test1'))
+	suite.addTest(tokenSortNegatives('Test2'))
+	suite.addTest(tokenSortNegatives('Test3'))
+	suite.addTest(tokenSortNegatives('Test4'))
+	suite.addTest(tokenSortNegatives('Test5'))
+	unittest.TextTestRunner(verbosity=2).run(suite)
+
+def tokenSortParenthesisSuite():
+	suite = unittest.TestSuite()
+	suite.addTest(tokenSortParenthesis('Test1'))
+	unittest.TextTestRunner(verbosity=2).run(suite)
+
 
 def allTokenSortTests():
 	tokenSortBasicTestSuite()
 	tokenSortBasicAdvancedSuite()
+	tokenSortNegativesSuite()

@@ -5,7 +5,7 @@ class tokenIter:
 	#Init
 	def __init__(self, tokens):
 		self.tokens = tokens
-		self.i = 0
+		self.i = -1
 
     #Without moving the iterator, return the next token's value
     #If out of bounds, return None
@@ -185,4 +185,4 @@ def tokenSort(tokens):
 	print("\n\nTokenSort: ")
 	iterator = tokenIter(tokens)
 	print(tokens)
-	return tokenSortRecur(tokens[0], 0, iterator)
+	return tokenSortRecur(iterator.parsePrimary(), 0, iterator)
