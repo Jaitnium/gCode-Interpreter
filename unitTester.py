@@ -7,7 +7,6 @@ from lexer import lexer
 from tokenparser import parser, tokenSort
 import sys
 
-
 class lexerBasicTestCases(unittest.TestCase):
 	#Basic operations
 	#Basic operations 
@@ -209,7 +208,97 @@ def allLexerTests():
 	lexerMinusSignTestSuite()
 	lexerParenthesis()
 
+################################################################################################
+
+#Run the lexer test cases here
+class tokenSortBasicTestCases(unittest.TestCase):
+    #Basic operations
+	def Test1(self):
+		test = ["9", "+", "4"]
+		output = ["+", "9", "4"]
+		self.assertEqual(tokenSort(test), output)	
+	def Test2(self):
+		test = ["3", "*", "4"]
+		output = ["*", "3", "4"]
+		self.assertEqual(tokenSort(test), output)	
+	def Test3(self):
+		test = ["3.999", "-", "4"]
+		output = ["-", "3.999", "4"]
+		self.assertEqual(tokenSort(test), output)	
+	def Test4(self):
+		test = ["3.999", "/", "4"]
+		output = ["/", "3.999", "4"]
+		self.assertEqual(tokenSort(test), output)
+	#Now with variables
+	def Test5(self):
+		test = ["V9", "+", "4"]
+		output = ["+", "V9", "4"]
+		self.assertEqual(tokenSort(test), output)	
+	def Test6(self):
+		test = ["3", "*", "V4"]
+		output = ["*", "3", "V4"]
+		self.assertEqual(tokenSort(test), output)	
+	def Test7(self):
+		test = ["3.999", "-", "V1"]
+		output = ["-", "3.999", "V1"]
+		self.assertEqual(tokenSort(test), output)	
+	def Test8(self):
+		test = ["3.999", "/", "V92"]
+		output = ["/", "3.999", "V92"]
+		self.assertEqual(tokenSort(test), output)
+
+class tokenSortAdvanced(unittest.TestCase):
+	#Variables, basic operations, multiple variables
+	#Tests precedence and associativity rules
+	#Precedence and associativity
+	def Test1(self):
+		test = ["3", "/", "4.23", "+", "10"]
+		output = ["+", "/", "3", "4.23", "10"]
+		self.assertEqual(tokenSort(test), output)
+	def Test2(self):
+		test = ["3", "/", "4.23", "-", "10"]
+		output = ["-", "/", "3", "4.23", "10"]
+		self.assertEqual(tokenSort(test), output)
+	def Test3(self):
+		test = ["3", "*", "4.23", "+", "10"]
+		output = ["+", "*", "3", "4.23", "10"]
+		self.assertEqual(tokenSort(test), output)
+	def Test4(self):
+		test = ["3", "*", "4.23", "-", "10"]
+		output = ["-", "*", "3", "4.23", "10"]
+		self.assertEqual(tokenSort(test), output)
+	def Test5(self):
+		test = ["3", "/", "4.23", "*", "10"]
+		output = ["/", "3", "*", "4.23", "10"]
+		self.assertEqual(tokenSort(test), output)	
+	def Test6(self):
+		test = ["V10", "=", "4.23", "/", "10", "+", "V8", "-", "2.1", "/", "V1"]
+		output = ["=", "V10", "-", "+", "/", "4.23", "10", "V8", "/", "2.1", "V1"]
+		self.assertEqual(tokenSort(test), output)
+
+def tokenSortBasicTestSuite():
+	suite = unittest.TestSuite()
+	suite.addTest(tokenSortBasicTestCases('Test1'))
+	suite.addTest(tokenSortBasicTestCases('Test2'))
+	suite.addTest(tokenSortBasicTestCases('Test3'))
+	suite.addTest(tokenSortBasicTestCases('Test4'))
+	suite.addTest(tokenSortBasicTestCases('Test5'))
+	suite.addTest(tokenSortBasicTestCases('Test6'))
+	suite.addTest(tokenSortBasicTestCases('Test7'))
+	suite.addTest(tokenSortBasicTestCases('Test8'))
+	unittest.TextTestRunner(verbosity=2).run(suite)
+
+def tokenSortBasicAdvancedSuite():
+	suite = unittest.TestSuite()
+	suite.addTest(tokenSortAdvanced('Test1'))
+	suite.addTest(tokenSortAdvanced('Test2'))
+	suite.addTest(tokenSortAdvanced('Test3'))
+	suite.addTest(tokenSortAdvanced('Test4'))
+	suite.addTest(tokenSortAdvanced('Test5'))
+	suite.addTest(tokenSortAdvanced('Test6'))
+	unittest.TextTestRunner(verbosity=2).run(suite)
 
 
-
-#def allTokenSortTests():
+def allTokenSortTests():
+	tokenSortBasicTestSuite()
+	tokenSortBasicAdvancedSuite()

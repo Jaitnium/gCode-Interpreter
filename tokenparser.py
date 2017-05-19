@@ -36,13 +36,11 @@ class tokenIter:
 				print("List too small!")
 				#Combine current token with previous negative sign
 				return "-" + self.tokens[self.i]
-			elif(isBinaryOp(self.tokens[self.i-1])):
+			elif(isBinaryOp(self.tokens[self.i-2])):
 				#Combine current token with previous negative sign
 				print("Is a negative!")
 				return "-" + self.tokens[self.i]
 		
-		#Else the sign was just subtraction so return the token
-		print("Just subtraction")
 		return self.tokens[self.i]
 
 	#Return current location's token, for debugging
@@ -162,22 +160,19 @@ def tokenSortRecur(lhs, min_prec, iterator):
 		print("lookAhead2: " + str(lookAhead))
 
 		#Calculate precedence of op and lookAhead
-		lookAheadPrec = precedenceLookUp(lookAhead)
-		opPrec = precedenceLookUp(op)
 
 		#If lookAhead is not None and (is a binary Op and has a higher precedense than op)
 		#OR (lookAhead has the same precedence as OP and is right associative)
-		while(lookAhead is not None and (isBinaryOp(lookAhead) and (lookAheadPrec > opPrec) ) or
-			(isRightAssociative(lookAhead, op) and (lookAheadPrec == opPrec)) ):
+		while(lookAhead is not None and (isBinaryOp(lookAhead) and (precedenceLookUp(lookAhead) > precedenceLookUp(op)) ) or
+			(isRightAssociative(lookAhead, op) and (precedenceLookUp(lookAhead) == precedenceLookUp(op))) ):
 
 			#Recurse on the right-hand-side
-			print("Reccuring with rhs: " + str(rhs) + " lookAheadPrec: " + str(lookAheadPrec))
-			rhs = tokenSortRecur(rhs, lookAheadPrec, iterator)
+			print("Reccuring with rhs: " + str(rhs) + " lookAheadPrec: " + str(precedenceLookUp(lookAhead)))
+			rhs = tokenSortRecur(rhs, precedenceLookUp(lookAhead), iterator)
 			print("Returned rhs is: " + str(rhs))
 			#Peek at the next token
 			lookAhead = iterator.peek()
-
-		print(str(rhs) + " type: " + str(type(rhs)))
+			print("lookAhead3:" + str(lookAhead))
 
 		#Combine the operator, left-hand-side, and right-hand-side into a single array
 		lhs = combine(op, lhs, rhs)

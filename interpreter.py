@@ -8,13 +8,12 @@ from lexer import lexer
 from tokenparser import parser, tokenSort
 
 #Import test cases
-from unitTester import lexerBasicTestSuite, lexerMinusSignTestSuite, allLexerTests
+from unitTester import lexerBasicTestSuite, lexerMinusSignTestSuite, allLexerTests, allTokenSortTests
 
 
 #Test lexer
 #allLexerTests()
-
-print(tokenSort(["V1", "=", "-", "8"]))
+allTokenSortTests()
 
 sys.exit(0)
 
