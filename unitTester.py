@@ -129,6 +129,36 @@ class lexerMinusSignTestCases(unittest.TestCase):
 		output = ["V1", "=", "-", "V2", "-", "V9", "-", "-", "V9", "*", "-", "4.23"]
 		self.assertEqual(lexer(test), output)	
 
+#Test parenthesis and nested parentehsis using Variables, basic operations, numbers, varying spacing
+class lexerParenthesisTestCases(unittest.TestCase):
+	def Test1(self):
+		test = "V1=(4 + 2)"
+		output = ["V1", "=", "(", "4", "+", "2", ")"]
+		self.assertEqual(lexer(test), output)
+	def Test2(self):
+		test = "V1=8 * (4 + 2)"
+		output = ["V1", "=", "8", "*", "(", "4", "+", "2", ")"]
+		self.assertEqual(lexer(test), output)
+	def Test3(self):
+		test = "V1=-9 / (4 + 2) - 10"
+		output = ["V1", "=", "-", "9", "/", "(", "4", "+", "2", ")", "-", "10"]
+		self.assertEqual(lexer(test), output)
+	def Test4(self):
+		test = "V1=(4.8 + -92) * (9 - 24)"
+		output = ["V1", "=", "(", "4.8", "+", "-", "92", ")", "*", "(", "9", "-", "24", ")"]
+		self.assertEqual(lexer(test), output)
+	def Test5(self):
+		test = "V1=2 -(10 - 8)"
+		output = ["V1", "=", "2", "-", "(", "10", "-", "8", ")"]
+		self.assertEqual(lexer(test), output)
+	def Test6(self):
+		test = "V1=   2 - (-  (  V2 + - 92) * 34.2  )  "
+		output = ["V1", "=", "2", "-", "(", "-", "(", "V2", "+", "-", "92", ")", "*", "34.2", ")"]
+		self.assertEqual(lexer(test), output)
+	def Test7(self):
+		test = "V1= (200.42 - (2 + ((10 * 9) / 5))) "
+		output = ["V1", "=", "(", "200.42", "-", "(", "2", "+", "(", "(", "10", "*", "9", ")", "/", "5", ")", ")", ")"]
+		self.assertEqual(lexer(test), output)	
 
 def lexerBasicTestSuite():
 	suite = unittest.TestSuite()
@@ -162,7 +192,24 @@ def lexerMinusSignTestSuite():
 	suite.addTest(lexerMinusSignTestCases('Test12'))
 	unittest.TextTestRunner(verbosity=2).run(suite)
 
+def lexerParenthesis():
+	suite = unittest.TestSuite()
+	suite.addTest(lexerParenthesisTestCases('Test1'))
+	suite.addTest(lexerParenthesisTestCases('Test2'))
+	suite.addTest(lexerParenthesisTestCases('Test3'))
+	suite.addTest(lexerParenthesisTestCases('Test4'))
+	suite.addTest(lexerParenthesisTestCases('Test5'))
+	suite.addTest(lexerParenthesisTestCases('Test6'))
+	suite.addTest(lexerParenthesisTestCases('Test7'))
+	unittest.TextTestRunner(verbosity=2).run(suite)
+
 #Run all lexer tests
 def allLexerTests():
 	lexerBasicTestSuite()
 	lexerMinusSignTestSuite()
+	lexerParenthesis()
+
+
+
+
+#def allTokenSortTests():
