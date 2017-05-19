@@ -118,9 +118,37 @@ def combine(op, lhs, rhs):
 		result.append(rhs)
 	return result
 
+#Helper function for tokenSortRecur
+#If the token given is "(", then tokenSortRecur on the inner expression
+#and return the results inside open and close parenthesis
+def parenCheck(token, min_prec, iterator):
+	if(token == "("):
+		#lhs of the inner parenthesis
+		recurLHS = iterator.parsePrimary()
+		#Recurse
+		rhs = tokenSortRecur(recurLHS , 0, iterator)
+		print("Parenthesis case: " + str(rhs))
+
+		#print("Iterator location " + str(iterator.location()))
+		#Iterator onto right parenthesis
+		iterator.parsePrimary()
+		#print("Iterator location " + str(iterator.location()))
+
+		#Append parenthesis around both sides
+		rhs.insert(0, "(")
+		rhs.append(")")
+		return rhs
+	else:
+		return token
+
 #Recursive function of tokenSort
 def tokenSortRecur(lhs, min_prec, iterator):
+	#Parenthesis check
+	#If a parenthesis is detected then recurse on the inner experession of the parenthesis
+	lhs = parenCheck(lhs, 0, iterator)
+
 	#print("lhs: " + str(lhs) + " min_prec: " + str(min_prec))
+
 	#Peek at next token
 	lookAhead = iterator.peek()
 	print("lookAhead1: " + str(lookAhead))
@@ -138,21 +166,7 @@ def tokenSortRecur(lhs, min_prec, iterator):
 
 		#Parenthesis check
 		#If a parenthesis is detected then recurse on the inner experession of the parenthesis
-		if(rhs == "("):
-			#lhs of the inner parenthesis
-			recurLHS = iterator.parsePrimary()
-			#Recurse
-			rhs = tokenSortRecur(recurLHS , 0, iterator)
-			print("Parenthesis case: " + str(rhs))
-
-			#print("Iterator location " + str(iterator.location()))
-			#Iterator onto right parenthesis
-			iterator.parsePrimary()
-			#print("Iterator location " + str(iterator.location()))
-
-			#Append parenthesis around both sides
-			rhs.insert(0, "(")
-			rhs.append(")")
+		rhs = parenCheck(rhs, 0, iterator)
 
 		print("rhs: " + str(rhs))
 		#Peek at next token

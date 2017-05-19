@@ -302,10 +302,21 @@ class tokenSortNegatives(unittest.TestCase):
 #Parenthesis
 class tokenSortParenthesis(unittest.TestCase):
 	def Test1(self):
-		test = ["V59", "=", "-", "4.23", "*", "10"]
-		output = ["=", "V59", "*", "-4.23", "10"]
+		test = ["(", "4.23", "*", "10", ")"]
+		output = ["(", "*", "4.23", "10", ")"]
 		self.assertEqual(tokenSort(test), output)
-
+	def Test2(self):
+		test = ["V59", "=", "(", "4.23", "*", "10", ")"]
+		output = ["=", "V59", "(", "*", "4.23", "10", ")"]
+		self.assertEqual(tokenSort(test), output)
+	def Test3(self):
+		test = ["V59", "=", "(", "4.23", "-", "10", ")", "*", "-", "V2"]
+		output = ["=", "V59", "*", "(", "-", "4.23", "10", ")", "-V2"]
+		self.assertEqual(tokenSort(test), output)
+	def Test4(self):
+		test = ["V59", "=", "(", "4.23", "*", "10", ")"]
+		output = ["=", "V59", "(", "*", "4.23", "10", ")"]
+		self.assertEqual(tokenSort(test), output)
 
 def tokenSortBasicTestSuite():
 	suite = unittest.TestSuite()
@@ -341,6 +352,8 @@ def tokenSortNegativesSuite():
 def tokenSortParenthesisSuite():
 	suite = unittest.TestSuite()
 	suite.addTest(tokenSortParenthesis('Test1'))
+	suite.addTest(tokenSortParenthesis('Test2'))
+	suite.addTest(tokenSortParenthesis('Test3'))
 	unittest.TextTestRunner(verbosity=2).run(suite)
 
 
@@ -348,3 +361,4 @@ def allTokenSortTests():
 	tokenSortBasicTestSuite()
 	tokenSortBasicAdvancedSuite()
 	tokenSortNegativesSuite()
+	tokenSortParenthesisSuite()
